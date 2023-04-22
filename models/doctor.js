@@ -3,14 +3,15 @@ const mongoose = require('mongoose');
 const doctorSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Enter Your Name"]
-    },
-    // doctor name or password may be same but email is unique
-    email: {
-        type: String,
-        required: [true, "Enter Your Email"],
+        required: [true, "Enter Your Name"],
         unique: true
     },
+    // doctor name or password may be same but email is unique
+    // email: {
+    //     type: String,
+    //     required: [true, "Enter Your Email"],
+    //     unique: true
+    // },
     password: {
         type: String,
         required: [true, "Enter Your Password"]
