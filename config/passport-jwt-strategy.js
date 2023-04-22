@@ -3,11 +3,11 @@ const JWTStrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 const Doctor = require('../models/doctor');
-// const env = require('./environment');
+const env = require('./environment');
 
 let opts = {
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: "secret"
+    secretOrKey: env.secretOrKey
 }
 
 passport.use(new JWTStrategy(opts, function(jwtPayLoad, done){

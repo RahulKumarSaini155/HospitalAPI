@@ -1,9 +1,11 @@
-const Doctor = require('../models/doctor');
-const Patient = require('../models/patient');
+const Doctor = require('../../../models/doctor');
+const Patient = require('../../../models/patient');
 const jwt = require('jsonwebtoken');
+const env = require('../../../config/environment');
 
 module.exports.registerDoctor = async (req, res)=>{
     try{
+        console.log("registerDoctor", req.body);
         // check if user already exist or not
         const user = await Doctor.findOne({name: req.body.name});
         if(!user){
@@ -43,7 +45,7 @@ module.exports.login = async (req, res)=>{
             return res.status(200).json({
                 success: true,
                 message: "doctor login successfull",
-                token: jwt.sign(user.toJSON(), "secret", {expiresIn: '100000'})
+                token: jwt.sign(user.toJSON(), env.secretOrKey, {expiresIn: '100000'})
             })
         }else{
             return res.status(404).json({
@@ -66,13 +68,16 @@ module.exports.registerPatient = async (req, res)=>{
         // check if user already exist or not
         const user = await Patient.findOne({phone: req.body.phone});
         if(!user){
-            req.body.doctor = "64428df9a5ff580177d9b04b";
+            // req.body.doctor = "64428df9a5ff580177d9b04b";
+            // which doctor login that id store at the time of patient create
+            req.body.doctor = req.user._id;
             const patient = await Patient.create(req.body);
 
             console.log("new patient created", patient);
             return res.status(200).json({
                 success: true,
-                message: "patient created successfully"
+                message: "patient created successfully",
+                patient_id: patient._id 
             })
         }else{
             // if patient already exist so return patient info
