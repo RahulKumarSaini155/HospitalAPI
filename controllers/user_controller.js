@@ -1,5 +1,6 @@
 const Doctor = require('../models/doctor');
 const Patient = require('../models/patient');
+const jwt = require('jsonwebtoken');
 
 module.exports.registerDoctor = async (req, res)=>{
     try{
@@ -27,6 +28,31 @@ module.exports.registerDoctor = async (req, res)=>{
 
     }catch(err){
         console.log('error in resister doctor', err);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
+    }
+}
+
+module.exports.login = async (req, res)=>{
+    try{
+        const user = await Doctor.findOne(req.body);
+        if(user){
+            // const token = jwt.sign(user.json(), "secret", {expiresIn: '100000'});
+            return res.status(200).json({
+                success: true,
+                message: "doctor login successfull",
+                token: jwt.sign(user.toJSON(), "secret", {expiresIn: '100000'})
+            })
+        }else{
+            return res.status(404).json({
+                success: false,
+                message: "Invalid username or password"
+            });
+        }
+    }catch(err){
+        console.log('error in doctor login', err);
         return res.status(500).json({
             success: false,
             message: "Internal Server Error"
