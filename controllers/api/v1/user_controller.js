@@ -5,7 +5,7 @@ const env = require('../../../config/environment');
 
 module.exports.registerDoctor = async (req, res)=>{
     try{
-        console.log("registerDoctor", req.body);
+        // console.log("registerDoctor", req.body);
         // check if user already exist or not
         const user = await Doctor.findOne({name: req.body.name});
         if(!user){
